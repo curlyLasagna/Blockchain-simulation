@@ -62,7 +62,7 @@ void part1(std::array<block, MAX_SIZE> blockChain, std::time_t time) {
 	/* Seed time */
 	srand(std::time(nullptr));
 
-	/* Generate the rest of the 99 blocks */
+	/* Generate the rest of the blocks */
 	for(int x = 1; x < MAX_SIZE; x++) {
 		int randNum = rand();
 		blockChain[x] = block(x, randNum, time, blockChain[x-1].getHash());	
@@ -81,6 +81,7 @@ void part2(std::array<block, MAX_SIZE> blockChain, std::time_t time, int difficu
 }
 
 void part3(std::array<block, MAX_SIZE> blockChain) {
+	// Prints the result of bfs and inorder searches
 	BinaryTree<block> *blockTree = new BinaryTree<block>();
 
 	for(size_t x = 0; x < MAX_SIZE; x++) 

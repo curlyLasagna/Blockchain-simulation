@@ -11,8 +11,9 @@ block::block() {
 	previousHash = "";
 } 
 
-// A constructor with all properties as arguments
-block::block(long id, 
+// A constructor with all of the properties as arguments.
+// This serves as the genesis or starting block
+block::block(long id,
 		long nonce, 
 		long timeId, 
 		std::string theHash, 
@@ -24,7 +25,7 @@ block::block(long id,
 	this->previousHash = previousHash;
 }
 
-// A Constructor that calls generateHash 
+// A Constructor that calls generateHash for any block after the genesis
 block::block(long id, long nonce, long timeId, std::string previousHash) 
 	: block(id, nonce, timeId, theHash, previousHash) {
 	this->theHash = generateHash(previousHash, nonce);
@@ -32,16 +33,22 @@ block::block(long id, long nonce, long timeId, std::string previousHash)
 
 // Generates a hash by appending nonce to previousHash and hashing it
 std::string block::generateHash(std::string previousHash, long nonce) {
+	/* Hashes the string. std::hash returns a size_t representation 
+	 * of the hash value passed parameter */
 	std::hash<std::string> ptr_hash;
 	char *temp = new char;
+	// Store the nonce as a string to be appended for the generated hash
 	std::string nonceString = std::to_string(nonce);
+	// hashBrowns contains the hashed version of the previousHash with the nonce appended 
 	long unsigned hashBrowns = ptr_hash(previousHash.append(nonceString));
+	// 20 padded zeroes is the limit 
 	sprintf(temp, "%020lu", hashBrowns);
 	std::string hashToString = temp;  
 	return hashToString;
 }
 
 long block::mineBlock(int difficulty) {
+	// Compares 
 	std::string bingo (difficulty, '0');
 	std::string curr = generateHash(previousHash, nonce);
 	while(curr.substr(0, difficulty).compare(bingo) != 0) {
